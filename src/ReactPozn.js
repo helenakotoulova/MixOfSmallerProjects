@@ -42,6 +42,7 @@ orange
 /*
 REACT JSX!!!!!!!!!!!!!!§
 JSX stands for JavaScript XML.
+Extensible Markup Language (XML) is a markup language that defines a set of rules for encoding documents in a format that is both human-readable and machine-readable
 JSX allows us to write HTML in React.
 JSX makes it easier to write and add HTML in React.
 JSX allows us to write HTML elements in JavaScript and place them in the DOM without any createElement()  and/or appendChild() methods.
@@ -494,7 +495,166 @@ function MyForm() {
 
 ReactDOM.render(<MyForm />, document.getElementById('root'));
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!! DODELAT  FORMS !!!!!!!!!!!!!!! 
+MULTIPLE INPUT FIELDS
+You can control the values of more than one input field by adding a name attribute to each element.
+We will initialize our state with an empty object.
+To access the fields in the event handler use the event.target.name and event.target.value syntax.
+To update the state, use square brackets [bracket notation] around the property name.
+import { useState } from "react";
+import ReactDOM from "react-dom";
+
+function MyForm() {
+  const [inputs, setInputs] = useState({});
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs(values => ({...values, [name]: value}))
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert(inputs);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>Enter your name:
+      <input 
+        type="text" 
+        name="username" 
+        value={inputs.username || ""} 
+        onChange={handleChange}
+      />
+      </label>
+      <label>Enter your age:
+        <input 
+          type="number" 
+          name="age" 
+          value={inputs.age || ""} 
+          onChange={handleChange}
+        />
+        </label>
+        <input type="submit" />
+    </form>
+  )
+}
+
+ReactDOM.render(<MyForm />, document.getElementById('root'));
+/// Note: We use the same event handler function for both input fields, we could write one event handler for each, but this gives us much cleaner code and is the preferred way in React.
+
+TEXTAREA
+The textarea element in React is slightly different from ordinary HTML.
+In HTML the value of a textarea was the text between the start tag <textarea> and the end tag </textarea>.
+
+-HTML:
+<textarea>Content of the textarea.</textarea>
+
+-REACT:
+In React the value of a textarea is placed in a value attribute.
+We'll use the useState Hook to mange the value of the textarea:
+
+import { useState } from "react";
+import ReactDOM from "react-dom";
+
+function MyForm() {
+  const [textarea, setTextarea] = useState(
+    "The content of a textarea goes in the value attribute"
+  );
+
+  const handleChange = (event) => {
+    setTextarea(event.target.value)
+  }
+
+  return (
+    <form>
+      <textarea value={textarea} onChange={handleChange} />
+    </form>
+  )
+}
+
+ReactDOM.render(<MyForm />, document.getElementById('root'));
+
+SELECT:
+A drop down list, or a select box, in React is also a bit different from HTML.
+In HTML, the selected value in the drop down list was defined with the selected attribute:
+<select>
+  <option value="Ford">Ford</option>
+  <option value="Volvo" selected>Volvo</option>
+  <option value="Fiat">Fiat</option>
+</select>
+
+In React, the selected value is defined with a value attribute on the select tag:
+function MyForm() {
+  const [myCar, setMyCar] = useState("Volvo");
+
+  const handleChange = (event) => {
+    setMyCar(event.target.value)
+  }
+
+  return (
+    <form>
+      <select value={myCar} onChange={handleChange}>
+        <option value="Ford">Ford</option>
+        <option value="Volvo">Volvo</option>
+        <option value="Fiat">Fiat</option>
+      </select>
+    </form>
+  )
+}
+
+/*
+REACT ROUTER
+Create React App doesn't include page routing. React Router is the most popular solution.
+To add React Router in your application, run this in the terminal from the root directory of the application:
+npm i -D react-router-dom
+
+<Routes>
+        <Route path="/" element={<AllMeetUpsPage />} />
+        <Route path="/new-meetups" element={<NewMeetUpsPage />} />
+        <Route path="/favorites" element={<Favorites />} />
+</Routes>
+
+*/
+
+/*
+REACT MEMO
+Using memo will cause React to skip rendering a component if its props have not changed.
+This can improve performance.
+
+import { memo } from "react";
+const Todos = ....
+export default memo(Todos);
+Now the Todos component only re-renders when the todos that are passed to it through props are updated.
+*/
+
+/*
+REACT CSS STYLING
+1 INLINE STYLING
+const Header = () => {
+  return (
+    <>
+      <h1 style={{backgroundColor: "red"}}>Hello Style!</h1>
+      <p>Add a little style!</p>
+    </>
+  );
+}
+
+Note: In JSX, JavaScript expressions are written inside curly braces, 
+and since JavaScript objects also use curly braces, the styling in the example above is written inside two sets of curly braces {{}}.
+Note: Use backgroundColor instead of background-color.
+
+2. CSS STYLESHEETS
+Create a new file called "App.css" and insert some CSS code in it. 
+Asnd import it in your application.
+
+
+3. CSS MODULES
+CSS Modules are convenient for components that are placed in separate files.
+The CSS inside a module is available only for the component that imported it, 
+and you do not have to worry about name conflicts.
+Create the CSS module with the .module.css extension, example: my-style.module.css.
+
 */
 
 /*
@@ -722,5 +882,145 @@ function Timer() {
 }
 
 3. USECONTEXT
+React Context is a way to manage state globally.
+It can be used together with the useState Hook to share state between deeply nested components more easily than with useState alone.
 
+The Problem
+State should be held by the highest parent component in the stack that requires access to the state.
+To illustrate, we have many nested components. The component at the top and bottom of the stack need access to the state.
+To do this without Context, we will need to pass the state as "props" through each nested component. 
+This is called "prop drilling".
+
+Example:
+Passing "props" through nested components:
+
+import { useState } from "react";
+import ReactDOM from "react-dom";
+
+function Component1() {
+  const [user, setUser] = useState("Jesse Hall");
+  return (
+    <>
+      <h1>{`Hello ${user}!`}</h1>
+      <Component2 user={user} />
+    </>
+  );
+}
+function Component2({ user }) {
+  return (
+    <>
+      <h1>Component 2</h1>
+      <Component3 user={user} />
+    </>
+  );
+}
+function Component3({ user }) {
+  return (
+    <>
+      <h1>Component 3</h1>
+      <Component4 user={user} />
+    </>
+  );
+}
+function Component4({ user }) {
+  return (
+    <>
+      <h1>Component 4</h1>
+      <Component5 user={user} />
+    </>
+  );
+}
+function Component5({ user }) {
+  return (
+    <>
+      <h1>Component 5</h1>
+      <h2>{`Hello ${user} again!`}</h2>
+    </>
+  );
+}
+
+ReactDOM.render(<Component1 />, document.getElementById("root"));
+
+Even though components 2-4 did not need the state, they had to pass the state along so that it could reach component 5.
+
+The Solution
+The solution is to create context.
+To create context, you must Import createContext and initialize it:
+
+import { useState, createContext } from "react";
+import ReactDOM from "react-dom";
+
+const UserContext = createContext()
+
+//Next we'll use the Context Provider to wrap the tree of components that need the state Context.
+//Wrap child components in the Context Provider and supply the state value.
+
+function Component1() {
+  const [user, setUser] = useState("Jesse Hall");
+
+  return (
+    <UserContext.Provider value={user}>
+      <h1>{`Hello ${user}!`}</h1>
+      <Component2 user={user} />
+    </UserContext.Provider>
+  );
+}
+//Now, all components in this tree will have access to the user Context.
+//Use the useContext Hook
+//In order to use the Context in a child component, we need to access it using the useContext Hook.
+//First, include the useContext in the import statement:
+
+import { useState, createContext, useContext } from "react";
+import ReactDOM from "react-dom";
+
+const UserContext = createContext();
+
+function Component1() {
+  const [user, setUser] = useState("Jesse Hall");
+
+  return (
+    <UserContext.Provider value={user}>
+      <h1>{`Hello ${user}!`}</h1>
+      <Component2 user={user} />
+    </UserContext.Provider>
+  );
+}
+function Component2() {
+  return (
+    <>
+      <h1>Component 2</h1>
+      <Component3 />
+    </>
+  );
+}
+function Component3() {
+  return (
+    <>
+      <h1>Component 3</h1>
+      <Component4 />
+    </>
+  );
+}
+function Component4() {
+  return (
+    <>
+      <h1>Component 4</h1>
+      <Component5 />
+    </>
+  );
+}
+function Component5() {
+  const user = useContext(UserContext);
+
+  return (
+    <>
+      <h1>Component 5</h1>
+      <h2>{`Hello ${user} again!`}</h2>
+    </>
+  );
+}
+ReactDOM.render(<Component1 />, document.getElementById("root"));
+
+
+// DALE EXISTUJI I DALSI REACT HOOKS.
 */
