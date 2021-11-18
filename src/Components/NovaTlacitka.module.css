@@ -1,8 +1,8 @@
-.actions button {
-    background-color: lightgreen;
+.actions {
+    background-color: lightgrey;
 }
 
-.actions button:hover,
-.actions button:active {
-    background-color: lime;
+.actions:hover,
+.actions:active {
+    background-color: maroon;
 }

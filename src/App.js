@@ -27,7 +27,7 @@ function App() {
       <br />
       <ButtonGroup nazvy={['1','2', '3']} doSomethingAfterClick={printButtonLabel} />
       <br />
-      <NovaTlacitka oznaceni={['a','b','c']} />
+      <NovaTlacitka />
     </div>
   );
 }
