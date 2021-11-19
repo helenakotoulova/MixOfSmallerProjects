@@ -14,13 +14,15 @@ function Ahoj(props) {
     const nadpish2=(x===0? "Hello" : "Goodbye")
 
     const [color,setColor]=useState();
+    const text = 'jsem barva '+props.color;
+    console.log(text)
 
 
     return (
         <section>
             <h1>Ahoj, mam {2+3} {props.color} psu</h1>
             <h2>{nadpish2}</h2>
-            <h3>{x===0? ("ahoj, jsem barva") : 'nashle'}</h3>
+            <h3>{x===0? ("ahoj, jsem barva "+props.color) : 'nashle'}</h3>
             <div>{myArray.map(element=><p>{element}</p>)}</div>
             <div>{vypis}</div>
             <div>

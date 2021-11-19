@@ -5,8 +5,7 @@ function MyForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    var jmeno=document.getElementsByTagName('input')[0].value;
-    alert('The name you entered was: '+jmeno)
+    alert('The name you entered was: '+name)
   }
 
   return (
